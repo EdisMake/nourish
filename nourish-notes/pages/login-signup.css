@@ -1,27 +1,81 @@
-.home {
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
+
+.login-signup {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1em;
-    padding: 1em;
-    justify-content: center; 
-  }
-  
-  .item {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 1em;
-    width: calc(33.333% - 1em); 
-  }
-  
-  @media (max-width: 768px) {
-    .item {
-      width: calc(50% - 1em); 
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #F7F9F8; 
+    font-family: 'Open Sans', sans-serif;
+}
+
+.login-signup form {
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 340px;
+}
+
+.login-signup h2 {
+    font-size: 1.8em;
+    color: #4A7248;
+    margin-bottom: 1.2rem;
+    text-align: center;
+}
+
+.login-signup input[type="text"],
+.login-signup input[type="password"],
+.login-signup input[type="email"] {
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 1rem;
+    border: 1px solid #CCE5D0;
+    border-radius: 20px;
+    background: #EDF5ED;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.login-signup input[type="text"]:focus,
+.login-signup input[type="password"]:focus,
+.login-signup input[type="email"]:focus {
+    outline: none;
+    border-color: #4A7248;
+    background: #FFF;
+}
+
+.login-signup button {
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    background-color: #4A7248;
+    color: white;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-signup button:hover {
+    background-color: #3D5F37; 
+}
+
+.error-message {
+    color: #D9534F; 
+    text-align: center;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .login-signup form {
+        padding: 1.5rem;
     }
-  }
-  
-  @media (max-width: 480px) {
-    .item {
-      width: 100%;
+}
+
+@media (max-width: 480px) {
+    .login-signup form {
+        padding: 1rem;
     }
-  }
-  
+}
