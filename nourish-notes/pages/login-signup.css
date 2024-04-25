@@ -1,0 +1,27 @@
+.home {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    padding: 1em;
+    justify-content: center; 
+  }
+  
+  .item {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 1em;
+    width: calc(33.333% - 1em); 
+  }
+  
+  @media (max-width: 768px) {
+    .item {
+      width: calc(50% - 1em); 
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .item {
+      width: 100%;
+    }
+  }
+  
