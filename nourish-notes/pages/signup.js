@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from './components/Header';
+import { useRouter } from 'next/router';
 import axios from 'axios'; // Import Axios for making HTTP requests
 import "./login-signup.css";
 
@@ -9,6 +10,8 @@ const Signup = () => {
       email: '',
       password: ''
     });
+
+    const router = useRouter();
 
     const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
