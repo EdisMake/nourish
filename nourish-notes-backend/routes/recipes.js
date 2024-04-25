@@ -55,50 +55,78 @@ router.post('/', authenticateToken, async (req, res) => {
 });
 
 // UPDATE a recipe
-router.put('/:id', authenticateToken, getRecipe, async (req, res) => {
-    if (req.body.title != null) {
-        res.recipe.title = req.body.title;
-    }
-    if (req.body.ingredients != null) {
-        res.recipe.ingredients = req.body.ingredients;
-    }
-    if (req.body.instructions != null) {
-        res.recipe.instructions = req.body.instructions;
-    }
-    if (req.body.imageUrl != null) {
-        res.recipe.imageUrl = req.body.imageUrl;
-    }
-
+router.put('/:id', authenticateToken, async (req, res) => {
     try {
-        const updatedRecipe = await res.recipe.save();
+        const recipeId = req.params.id;
+
+        // Check if the recipe exists
+        const existingRecipe = await Recipe.findById(recipeId);
+        if (!existingRecipe) {
+            return res.status(404).json({ message: 'Recipe not found' });
+        }
+
+        // Check if the user is authorized to update the recipe
+        if (existingRecipe.createdBy.toString() !== req.user.userId) {
+            return res.status(403).json({ message: 'Unauthorized to update this recipe' });
+        }
+
+        // Update the recipe fields if provided in the request body
+        if (req.body.title != null) {
+            existingRecipe.title = req.body.title;
+        }
+        if (req.body.recipe != null) {
+            existingRecipe.recipe = req.body.recipe;
+        }
+        if (req.body.image != null) {
+            existingRecipe.imageUrl = req.body.image;
+        }
+
+        // Save the updated recipe
+        const updatedRecipe = await existingRecipe.save();
         res.json(updatedRecipe);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
+
 // DELETE a recipe
-router.delete('/:id', authenticateToken, getRecipe, async (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
     try {
-        await res.recipe.remove();
+        const recipeId = req.params.id;
+
+        // Check if the recipe exists
+        const existingRecipe = await Recipe.findById(recipeId);
+        if (!existingRecipe) {
+            return res.status(404).json({ message: 'Recipe not found' });
+        }
+
+        // Check if the user is authorized to delete the recipe
+        if (existingRecipe.createdBy.toString() !== req.user.userId) {
+            return res.status(403).json({ message: 'Unauthorized to delete this recipe' });
+        }
+
+        // Delete the recipe
+        await Recipe.findByIdAndDelete(recipeId);
         res.json({ message: 'Recipe deleted' });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
 
-// Middleware function to get a specific recipe by ID
+
 async function getRecipe(req, res, next) {
     try {
         const recipe = await Recipe.findById(req.params.id);
-        if (recipe == null) {
+        if (!recipe) {
             return res.status(404).json({ message: 'Recipe not found' });
         }
-        res.recipe = recipe;
+        res.locals.recipe = recipe; // Assign the recipe to res.locals.recipe
         next();
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }
 }
+
 
 router.get('/user/:userId/recipes', authenticateToken, async (req, res) => {
     try {
